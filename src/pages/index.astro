@@ -301,8 +301,10 @@ const stats = [
 
       try {
         const res = await fetch(`${API_URL}/api/plans`);
+        const data = await res.json();
         if (!res.ok) throw new Error();
-        const plans = await res.json();
+
+        const plans = Array.isArray(data) ? data : Array.isArray(data?.plans) ? data.plans : [];
 
         if (!plans.length) {
           container.innerHTML = `<div class="col-span-3 text-center py-12 text-slate-500 text-sm">Planes disponibles próximamente.</div>`;
