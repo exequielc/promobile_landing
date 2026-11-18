@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import groteskUrl from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -7,21 +8,25 @@ interface Props {
 }
 
 const {
-  title = 'ProMobile — Software para negocios de servicios',
-  description = 'Plataforma SaaS para gestionar clientes, órdenes de servicio y pagos. Empezá gratis hoy.',
+  title = 'ProMobile+ — Un sistema de gestión que toma la forma de tu negocio',
+  description = 'Kiosco, bar, taller o consultorio: ProMobile+ se adapta a cómo trabajás. Ventas, comandas, órdenes de trabajo, turnos, cobros y caja, en la compu y en el celu. Probalo gratis.',
 } = Astro.props;
 ---
 
 <html lang="es">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#EDEAE3" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={groteskUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preconnect" href="https://api.promobile.site" crossorigin />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
     <title>{title}</title>
   </head>
   <body>

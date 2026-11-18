@@ -1,24 +1,89 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
 @import "tailwindcss";
+@import "@fontsource-variable/space-grotesk/wght.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-700.css";
+
+@theme {
+  --color-paper: #edeae3;
+  --color-paper-dark: #e2ded5;
+  --color-ink: #111111;
+  --color-muted: #6f6a60;
+  --color-ticket: #ffffff;
+  --color-comanda: #f7e26b;
+  --color-orden: #f2b9a0;
+  --color-turno: #b8d8c8;
+  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
 
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-display);
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  background: #0a0a0f;
-  color: #f1f5f9;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  overflow-x: hidden;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+::selection { background: var(--color-comanda); color: var(--color-ink); }
+
+:focus-visible { outline: 2.5px solid var(--color-ink); outline-offset: 3px; }
+
+/* Borde dentado de papel cortado (abajo, o arriba y abajo) */
+.zigzag-b {
+  --z: 10px;
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(var(--z) * 2) 100%;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(var(--z) * 2) 100%;
+}
+.zigzag-y {
+  --z: 10px;
+  -webkit-mask:
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / calc(var(--z) * 2) 51% repeat-x,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / calc(var(--z) * 2) 51% repeat-x;
+  mask:
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / calc(var(--z) * 2) 51% repeat-x,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / calc(var(--z) * 2) 51% repeat-x;
+}
+
+/* Línea de puntos tipo ticket entre concepto y valor */
+.leader { display: flex; align-items: baseline; gap: 0.4em; }
+.leader > .dots { flex: 1; border-bottom: 2px dotted currentColor; opacity: 0.35; transform: translateY(-0.3em); }
+
+/* Mazo de papeles */
+.deck { scrollbar-width: none; }
+.deck::-webkit-scrollbar { display: none; }
+
+.paper {
+  transition: rotate 0.35s cubic-bezier(.2,.8,.2,1), translate 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.3s;
+}
+#deck .paper[aria-pressed="false"] { opacity: 0.55; }
+#deck .paper[aria-pressed="false"]:hover { opacity: 0.85; }
+#deck .paper[aria-pressed="true"] { rotate: 0deg; translate: 0 -8px; }
+
+/* Sello de goma */
+.stamp {
+  opacity: 0;
+  transform: rotate(-12deg) scale(1.8);
+  transition: opacity 0.2s, transform 0.35s cubic-bezier(.3,1.6,.5,1);
+}
+.paper[aria-pressed="true"] .stamp { opacity: 0.9; transform: rotate(-12deg) scale(1); }
+
+/* Pasos del día */
+.day-step { animation: step-in 0.45s both cubic-bezier(.2,.8,.2,1); }
+@keyframes step-in { from { opacity: 0; transform: translateY(10px); } }
+
+/* Barra fija inferior en celular */
+.sticky-cta { transform: translateY(120%); transition: transform 0.3s; }
+.sticky-cta.visible { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }

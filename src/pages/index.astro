@@ -2,361 +2,489 @@
 import Layout from '../layouts/Layout.astro';
 
 const APP_URL = 'https://app.promobile.site/';
+const LOGIN_URL = 'https://app.promobile.site/login';
 const REGISTER_URL = 'https://app.promobile.site/register';
 const PORTAL_URL = 'https://app.promobile.site/portal';
 const API_URL = 'https://api.promobile.site';
+const CONTACT_MAIL = 'hola@promobile.site';
+const TRIAL_DAYS = 15;
 
-const products = [
+// Cada rubro: su "papelito", su sello y su día de trabajo.
+const rubros = [
   {
-    id: 'clientesplus',
-    name: 'ClientesPlus',
-    tagline: 'Gestión completa para negocios de servicios',
-    description:
-      'Administrá tus clientes, órdenes de trabajo, pagos y deudas desde un solo lugar. Diseñado para talleres, técnicos y prestadores de servicios.',
-    status: 'Disponible',
-    statusColor: 'text-emerald-400 bg-emerald-400/10 ring-emerald-400/20',
-    href: APP_URL,
-    icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>`,
-    features: [
-      'Gestión de clientes y contactos',
-      'Órdenes de servicio con estados',
-      'Control de pagos y deudas',
-      'Generador de presupuestos PDF',
-      'Panel de administración completo',
-      'Emails automáticos',
+    id: 'kiosco',
+    nombre: 'Kiosco y comercio',
+    corto: 'el kiosco',
+    color: 'bg-ticket',
+    tilt: '-rotate-2',
+    sello: 'Pagado',
+    forma: 'ticket',
+    papel: {
+      titulo: 'Kiosco La Esquina',
+      lineas: [['2 alfajor', '2.400'], ['1 gaseosa 500', '1.800'], ['1 cargador', '6.500']],
+      total: ['Total', '$10.700'],
+      pie: 'mp · transferencia · efvo',
+    },
+    dia: [
+      ['Vendés en tres toques', 'buscás, sumás y cobrás desde el celu o la compu'],
+      ['El stock se descuenta solo', 'cada venta actualiza el inventario'],
+      ['Cobrás como te paguen', 'efectivo, Mercado Pago o transferencia'],
+      ['Cerrás la caja', 'y sabés cuánto entró y cuánto salió'],
     ],
   },
   {
-    id: 'coming-soon-1',
-    name: 'StockPlus',
-    tagline: 'Control de inventario simplificado',
-    description:
-      'Gestioná tu stock, productos y proveedores. Alertas de reposición, informes de rotación y más. Próximamente.',
-    status: 'Próximamente',
-    statusColor: 'text-slate-400 bg-slate-400/10 ring-slate-400/20',
-    href: null,
-    icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>`,
-    features: [
-      'Inventario en tiempo real',
-      'Alertas de stock bajo',
-      'Gestión de proveedores',
-      'Informes de rotación',
+    id: 'bar',
+    nombre: 'Bar y restaurante',
+    corto: 'el bar',
+    color: 'bg-comanda',
+    tilt: 'rotate-[1.5deg]',
+    sello: 'En cocina',
+    forma: 'comanda',
+    papel: {
+      titulo: 'Comanda · Mesa 4',
+      lineas: [['2', 'milanesa napo'], ['1', 'papas fritas'], ['3', 'pinta IPA']],
+      total: ['Mozo', 'Caro · 21:40'],
+      pie: 'pedido desde carta qr',
+    },
+    dia: [
+      ['Te piden desde la mesa', 'escanean la carta QR y eligen'],
+      ['La comanda va a preparación', 'cocina y barra, cada una con lo suyo'],
+      ['Seguís cada mesa', 'pidiendo, preparando, lista para cobrar'],
+      ['Cerrás la cuenta', 'dividida entre varios y con propina'],
     ],
   },
   {
-    id: 'coming-soon-2',
-    name: 'AgendaPlus',
-    tagline: 'Turnos y agenda online',
-    description:
-      'Sistema de turnos online para que tus clientes reserven directamente. Recordatorios automáticos por WhatsApp y email.',
-    status: 'Próximamente',
-    statusColor: 'text-slate-400 bg-slate-400/10 ring-slate-400/20',
-    href: null,
-    icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>`,
-    features: [
-      'Reservas online 24/7',
-      'Recordatorios automáticos',
-      'Integración con WhatsApp',
-      'Calendario sincronizado',
+    id: 'taller',
+    nombre: 'Taller y servicio técnico',
+    corto: 'el taller',
+    color: 'bg-orden',
+    tilt: '-rotate-1',
+    sello: 'Listo',
+    forma: 'etiqueta',
+    papel: {
+      titulo: 'Orden #0187',
+      lineas: [['Equipo', 'moto 110cc'], ['Cliente', 'Juan P.'], ['Falla', 'no arranca']],
+      total: ['Seña', '$20.000'],
+      pie: 'seguimiento por link',
+    },
+    dia: [
+      ['Recibís el trabajo', 'orden con los datos del equipo y la seña'],
+      ['Pasás el presupuesto', 'por WhatsApp, con link de seguimiento'],
+      ['Actualizás el estado', 'tu cliente lo ve sin tener que llamarte'],
+      ['Entregás y cobrás', 'y te queda anotado quién te debe'],
+    ],
+  },
+  {
+    id: 'turnos',
+    nombre: 'Especialistas con turnos',
+    corto: 'el consultorio',
+    color: 'bg-turno',
+    tilt: 'rotate-2',
+    sello: 'Confirmado',
+    forma: 'turno',
+    papel: {
+      titulo: 'Turno',
+      lineas: [['Jue 21', '10:00 hs'], ['Paciente', 'Laura G.'], ['Servicio', 'limpieza facial']],
+      total: ['Reserva', 'por QR'],
+      pie: 'sin llamadas ni mensajes',
+    },
+    dia: [
+      ['Te reservan solos', 'desde tu QR o tu link, a cualquier hora'],
+      ['Confirmás con un toque', 'y tu cliente recibe el aviso por mail'],
+      ['Atendés y marcás', 'asistió, faltó o reprogramó'],
+      ['Cobrás el turno', 'y ves cómo viene tu mes de un vistazo'],
     ],
   },
 ];
 
-const stats = [
-  { value: '100%', label: 'En la nube' },
-  { value: '15 días', label: 'Prueba gratuita' },
-  { value: '24/7', label: 'Disponibilidad' },
-  { value: 'AR$', label: 'Precios en pesos' },
+const base = [
+  ['Clientes con historial', 'incluido'],
+  ['Cobros y quién te debe', 'incluido'],
+  ['Caja diaria y egresos', 'incluido'],
+  ['Equipo con usuario propio', 'incluido'],
+  ['Carta o catálogo por QR', 'incluido'],
+  ['Tickets por Bluetooth', 'incluido'],
+  ['Web y app para el celu', 'incluido'],
+  ['Soporte de personas reales', 'incluido'],
+];
+
+const pasos = [
+  ['Creás tu cuenta', `Mail y contraseña. ${TRIAL_DAYS} días gratis, sin tarjeta.`],
+  ['Elegís tu rubro', 'Kiosco, bar, taller, consultorio o lo que hagas.'],
+  ['La app se acomoda', 'Menús, pantallas y palabras de tu negocio. Empezás a usarla ese mismo día.'],
 ];
 ---
 
 <Layout>
   <!-- NAV -->
-  <header class="fixed top-0 inset-x-0 z-50 border-b border-white/5 backdrop-blur-md bg-[#0a0a0f]/80">
-    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-black text-sm">P</div>
-        <span class="font-bold text-white text-lg">ProMobile</span>
+  <header class="sticky top-0 z-40 bg-paper/90 backdrop-blur-sm border-b-2 border-ink">
+    <div class="mx-auto max-w-6xl px-5 h-14 sm:h-16 flex items-center justify-between">
+      <a href="/" class="text-lg sm:text-xl font-bold tracking-tight" aria-label="ProMobile+ inicio">
+        promobile<span class="ml-0.5 inline-block bg-ink text-paper px-1.5 leading-tight">+</span>
       </a>
-      <nav class="hidden md:flex items-center gap-8 text-sm text-slate-400">
-        <a href="#productos" class="hover:text-white transition-colors">Productos</a>
-        <a href="#precios" class="hover:text-white transition-colors">Precios</a>
-        <a href="#contacto" class="hover:text-white transition-colors">Contacto</a>
+      <nav class="flex items-center gap-1 sm:gap-2 font-mono text-[13px] sm:text-sm">
+        <a href="#rubros" class="hidden md:inline px-3 py-2 hover:underline underline-offset-4">rubros</a>
+        <a href="#planes" class="hidden md:inline px-3 py-2 hover:underline underline-offset-4">planes</a>
+        <a href={PORTAL_URL} class="hidden md:inline px-3 py-2 hover:underline underline-offset-4">portal de clientes</a>
+        <a href={LOGIN_URL} class="px-3 py-2 underline underline-offset-4 md:no-underline md:hover:underline">ingresar</a>
+        <a href={REGISTER_URL} class="hidden sm:inline-flex ml-1 rounded-full bg-ink text-paper px-4 py-2 font-display font-bold text-sm hover:bg-ink/85">
+          Probar gratis
+        </a>
       </nav>
-      <div class="flex items-center gap-3">
-        <a href={PORTAL_URL} class="hidden sm:block text-sm text-slate-400 hover:text-white transition-colors px-3 py-1.5">
-          Mi cuenta
-        </a>
-        <a href={APP_URL} class="hidden sm:block text-sm text-slate-400 hover:text-white transition-colors px-3 py-1.5">
-          Ingresar
-        </a>
-        <a href={REGISTER_URL} class="text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg transition-colors">
-          Empezar gratis
-        </a>
-      </div>
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="relative pt-32 pb-24 px-6 overflow-hidden">
-    <!-- Background glow -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-      <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-600/20 rounded-full blur-3xl"></div>
-      <div class="absolute top-20 right-0 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-3xl"></div>
-    </div>
-
-    <div class="relative max-w-4xl mx-auto text-center">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 ring-1 ring-indigo-500/20 mb-6">
-        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
-        Software para negocios argentinos
-      </div>
-
-      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight mb-6">
-        Herramientas que hacen<br/>
-        <span class="gradient-text">crecer tu negocio</span>
-      </h1>
-
-      <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-        Suite de aplicaciones SaaS diseñadas para emprendedores y pymes de servicios.
-        Simple, potente y en pesos argentinos.
-      </p>
-
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href={REGISTER_URL} class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-indigo-600/30">
-          Empezar gratis — 15 días
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
-        </a>
-        <a href="#productos" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 text-slate-300 hover:text-white font-medium rounded-xl border border-white/10 hover:border-white/20 transition-all">
-          Ver productos
-        </a>
-      </div>
-
-      <!-- Stats -->
-      <div class="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/5">
-        {stats.map(s => (
-          <div class="bg-[#0a0a0f] px-6 py-5 text-center">
-            <p class="text-2xl font-bold text-white">{s.value}</p>
-            <p class="text-xs text-slate-500 mt-0.5">{s.label}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- PRODUCTS -->
-  <section id="productos" class="py-24 px-6">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-14">
-        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">Nuestros productos</h2>
-        <p class="text-slate-400 text-lg max-w-xl mx-auto">
-          Cada herramienta está pensada para resolver un problema real de tu negocio.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {products.map((product, i) => (
-          <div class={`relative flex flex-col rounded-2xl border p-6 transition-all duration-300 ${
-            product.href
-              ? 'border-indigo-500/40 bg-gradient-to-b from-indigo-950/40 to-slate-900/40 hover:border-indigo-400/60 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/10'
-              : 'border-white/5 bg-slate-900/30'
-          }`}>
-            {i === 0 && (
-              <div class="absolute -top-px left-6 right-6 h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent"></div>
-            )}
-
-            <div class="flex items-start justify-between mb-4">
-              <div class={`w-12 h-12 rounded-xl flex items-center justify-center ${product.href ? 'bg-indigo-600/20 text-indigo-400' : 'bg-slate-800 text-slate-500'}`}
-                set:html={product.icon}>
-              </div>
-              <span class={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ring-1 ${product.statusColor}`}>
-                {product.status === 'Disponible' && <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>}
-                {product.status}
-              </span>
-            </div>
-
-            <h3 class="text-xl font-bold text-white mb-1">{product.name}</h3>
-            <p class="text-sm font-medium text-indigo-400 mb-3">{product.tagline}</p>
-            <p class="text-sm text-slate-400 leading-relaxed mb-5 flex-1">{product.description}</p>
-
-            <ul class="space-y-2 mb-6">
-              {product.features.map(f => (
-                <li class="flex items-center gap-2 text-sm text-slate-300">
-                  <svg class={`w-4 h-4 shrink-0 ${product.href ? 'text-indigo-400' : 'text-slate-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
-                  </svg>
-                  {f}
-                </li>
-              ))}
-            </ul>
-
-            {product.href ? (
-              <a href={product.href} class="mt-auto flex items-center justify-center gap-2 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors">
-                Acceder a {product.name}
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
-              </a>
-            ) : (
-              <div class="mt-auto py-2.5 px-4 bg-slate-800 text-slate-500 text-sm font-medium rounded-xl text-center cursor-not-allowed">
-                Próximamente
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- PRICING (carga dinámica) -->
-  <section id="precios" class="py-24 px-6 border-t border-white/5">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-14">
-        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">Planes para ClientesPlus</h2>
-        <p class="text-slate-400 text-lg">
-          Comenzá con 15 días gratis. Sin tarjeta de crédito requerida.
-        </p>
-      </div>
-
-      <div id="plans-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Skeleton loaders -->
-        <div class="h-64 rounded-2xl bg-slate-800/50 animate-pulse"></div>
-        <div class="h-64 rounded-2xl bg-slate-800/50 animate-pulse"></div>
-        <div class="h-64 rounded-2xl bg-slate-800/50 animate-pulse"></div>
-      </div>
-
-      <p class="text-center text-sm text-slate-500 mt-6">
-        Todos los planes incluyen período de prueba gratuita · Sin permanencia
-      </p>
-    </div>
-  </section>
-
-  <!-- WHY PROMOBILE -->
-  <section class="py-24 px-6 border-t border-white/5">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-14">
-        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">¿Por qué ProMobile?</h2>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[
-          { icon: '🇦🇷', title: 'Hecho para Argentina', text: 'Precios en pesos, soporte local y adaptado a la forma de trabajar de los negocios argentinos.' },
-          { icon: '⚡', title: 'Listo en minutos', text: 'Sin instalación, sin configuración compleja. Creá tu cuenta y empezá a cargar clientes en el día.' },
-          { icon: '🔒', title: 'Tus datos seguros', text: 'Toda tu información almacenada de forma segura con backups automáticos y acceso HTTPS.' },
-          { icon: '📱', title: 'Desde cualquier dispositivo', text: 'Accedé desde tu computadora, tablet o celular. Siempre actualizado, siempre disponible.' },
-          { icon: '💬', title: 'Soporte real', text: 'Canal de soporte directo con el equipo. Tus consultas son respondidas por personas, no bots.' },
-          { icon: '🚀', title: 'En constante evolución', text: 'Nuevas funciones cada mes basadas en el feedback de los usuarios. Siempre mejorando.' },
-        ].map(item => (
-          <div class="bg-slate-900/50 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-colors">
-            <div class="text-3xl mb-3">{item.icon}</div>
-            <h3 class="font-semibold text-white mb-2">{item.title}</h3>
-            <p class="text-sm text-slate-400 leading-relaxed">{item.text}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA FINAL -->
-  <section id="contacto" class="py-24 px-6 border-t border-white/5">
-    <div class="max-w-3xl mx-auto text-center">
-      <div class="relative rounded-3xl border border-indigo-500/20 bg-gradient-to-b from-indigo-950/50 to-slate-900/50 p-12 overflow-hidden">
-        <div class="absolute inset-0 bg-indigo-600/5 pointer-events-none"></div>
-        <div class="relative">
-          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Empezá hoy, gratis
-          </h2>
-          <p class="text-slate-400 text-lg mb-8 max-w-xl mx-auto">
-            15 días de prueba sin costo. Sin tarjeta de crédito. Si te convence, elegís el plan que más te sirva.
+  <main>
+    <!-- HERO + RUBROS -->
+    <section id="rubros" class="mx-auto max-w-6xl px-5 pt-8 sm:pt-14 lg:pt-20 pb-6">
+      <div class="lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-12 lg:items-center">
+        <div>
+          <p class="font-mono text-xs sm:text-sm text-muted">sistema de gestión · cualquier rubro</p>
+          <h1 class="mt-3 text-[2.6rem] leading-[0.95] sm:text-6xl xl:text-[4.25rem] font-bold tracking-[-0.04em]">
+            Cada negocio tiene su papelito.
+            <span class="block mt-1 text-muted">Nosotros lo pasamos al celu.</span>
+          </h1>
+          <p class="mt-5 max-w-xl text-lg sm:text-xl leading-snug">
+            Ticket, comanda, orden de trabajo o turno: ProMobile+ toma la forma de cómo trabajás vos.
+            Un solo sistema, en la compu y en el celular.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href={REGISTER_URL} class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-all hover:scale-105 shadow-lg shadow-indigo-600/30">
-              Crear cuenta gratis
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+          <div id="hero-cta" class="mt-7 flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <a href={REGISTER_URL} class="inline-flex items-center justify-center gap-3 rounded-full bg-ink text-paper px-7 py-4 text-lg font-bold hover:bg-ink/85 active:scale-[0.98] transition">
+              Probalo gratis {TRIAL_DAYS} días <span aria-hidden="true" class="font-mono">→</span>
             </a>
-            <a href={`mailto:hola@promobile.site`} class="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-slate-300 hover:text-white font-medium rounded-xl border border-white/10 hover:border-white/20 transition-all">
-              Contactar al equipo
+            <a href={LOGIN_URL} class="inline-flex items-center justify-center py-2 font-mono text-sm underline underline-offset-4 sm:no-underline sm:rounded-full sm:border-2 sm:border-ink sm:px-7 sm:py-4 sm:font-display sm:text-lg sm:font-bold sm:hover:bg-ink sm:hover:text-paper transition">
+              Ya tengo cuenta
             </a>
+          </div>
+          <p class="mt-6 font-mono text-xs sm:text-sm hidden lg:block">↘ tocá un papel para ver el día de ese negocio</p>
+        </div>
+
+        <!-- Mazo de papeles -->
+        <div class="mt-6 lg:mt-0">
+          <p class="font-mono text-xs sm:text-sm mb-1 lg:hidden">↓ deslizá y elegí el tuyo</p>
+          <div
+            id="deck"
+            class="deck -mx-5 px-5 flex gap-4 overflow-x-auto snap-x snap-mandatory pt-4 pb-8 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-2 lg:gap-6 lg:overflow-visible"
+            role="group"
+            aria-label="Elegí el rubro de tu negocio"
+          >
+            {rubros.map((r, i) => (
+              <button
+                type="button"
+                class={`paper relative shrink-0 w-[68vw] max-w-[250px] lg:w-auto lg:max-w-none snap-center text-left text-ink font-mono text-[13px] leading-relaxed p-4 pb-6 ${r.color} ${r.tilt} ${r.forma === 'ticket' ? 'zigzag-b pb-8' : ''} ${r.forma === 'etiqueta' ? 'rounded-xl' : ''} ${r.forma === 'turno' ? 'rounded-md' : ''} cursor-pointer`}
+                data-rubro={r.id}
+                aria-pressed={i === 0 ? 'true' : 'false'}
+                aria-controls="dia"
+              >
+                {r.forma === 'etiqueta' && (
+                  <span class="block w-3.5 h-3.5 mb-2 rounded-full bg-paper border-2 border-ink" aria-hidden="true"></span>
+                )}
+                {r.forma === 'comanda' && (
+                  <span class="block border-t-2 border-dashed border-ink/50 -mx-4 -mt-1 mb-3" aria-hidden="true"></span>
+                )}
+                <span class="block font-bold uppercase tracking-wide">{r.papel.titulo}</span>
+                <span class="block my-1.5 border-t-2 border-dotted border-ink/40" aria-hidden="true"></span>
+                {r.papel.lineas.map(([a, b]) => (
+                  <span class="leader"><span>{a}</span><span class="dots"></span><span>{b}</span></span>
+                ))}
+                <span class="block my-1.5 border-t-2 border-dotted border-ink/40" aria-hidden="true"></span>
+                <span class="leader font-bold"><span>{r.papel.total[0]}</span><span class="dots"></span><span>{r.papel.total[1]}</span></span>
+                <span class="block mt-2 text-[11px] text-ink/60">{r.papel.pie}</span>
+                <span class="stamp pointer-events-none absolute right-3 bottom-8 border-[3px] border-ink rounded-md px-2 py-0.5 font-display font-bold uppercase text-sm tracking-wider" aria-hidden="true">
+                  {r.sello}
+                </span>
+                <span class="sr-only">Ver el día de {r.nombre}</span>
+              </button>
+            ))}
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-white/5 py-10 px-6">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-      <div class="flex items-center gap-2">
-        <div class="w-6 h-6 rounded bg-indigo-600 flex items-center justify-center text-white font-black text-xs">P</div>
-        <span class="font-medium text-slate-400">ProMobile</span>
-        <span>· © {new Date().getFullYear()}</span>
+      <!-- Un día en tu negocio -->
+      <div id="dia" class="mt-2 lg:mt-10 rounded-[28px] bg-ink text-paper p-5 sm:p-8 lg:p-10" aria-live="polite">
+        {rubros.map((r, i) => (
+          <div data-dia={r.id} hidden={i !== 0}>
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h2 class="text-2xl sm:text-4xl font-bold tracking-tight">Un día en {r.corto}</h2>
+              <p class="font-mono text-xs sm:text-sm text-paper/60">{r.nombre.toLowerCase()}</p>
+            </div>
+            <ol class="mt-5 grid gap-0 lg:grid-cols-4 lg:gap-6">
+              {r.dia.map(([titulo, detalle], k) => (
+                <li class="day-step grid grid-cols-[2.5rem_1fr] lg:grid-cols-1 gap-2 border-t-2 border-dashed border-paper/30 py-4 lg:pt-5" style={`animation-delay:${k * 70}ms`}>
+                  <span class="font-mono font-bold text-paper/60 lg:text-3xl lg:text-paper">0{k + 1}</span>
+                  <span>
+                    <span class="block text-lg sm:text-xl font-bold leading-tight">{titulo}</span>
+                    <span class="block mt-1 font-mono text-[13px] text-paper/65 leading-snug">{detalle}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))}
+        <p class="mt-2 font-mono text-[13px] text-paper/60">¿Tu rubro no está? Elegís "general" y lo acomodás a tu manera.</p>
       </div>
-      <div class="flex items-center gap-6">
-        <a href={APP_URL} class="hover:text-slate-300 transition-colors">ClientesPlus</a>
-        <a href={REGISTER_URL} class="hover:text-slate-300 transition-colors">Registro</a>
-        <a href="mailto:hola@promobile.site" class="hover:text-slate-300 transition-colors">Contacto</a>
+    </section>
+
+    <!-- LO QUE TIENEN TODOS -->
+    <section class="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+      <div class="lg:grid lg:grid-cols-[1fr_1.1fr] lg:gap-16 lg:items-center">
+        <div>
+          <p class="font-mono text-xs sm:text-sm text-muted">la base es la misma</p>
+          <h2 class="mt-3 text-4xl sm:text-5xl font-bold tracking-[-0.03em] leading-[0.95]">
+            Cambia la forma.<br />No cambia lo importante.
+          </h2>
+          <p class="mt-5 max-w-md text-lg leading-snug">
+            Vendas productos, servicios o turnos, todos los rubros traen lo mismo de fábrica.
+            No hay módulos sueltos ni extras escondidos.
+          </p>
+        </div>
+        <div class="mt-10 lg:mt-0 flex justify-center">
+          <div class="zigzag-y w-full max-w-md bg-ticket px-6 py-9 font-mono text-[13px] sm:text-sm leading-loose -rotate-1">
+            <p class="text-center font-bold uppercase tracking-widest">ProMobile+</p>
+            <p class="text-center text-ink/60 text-xs">base común · todos los rubros</p>
+            <p class="my-3 border-t-2 border-dotted border-ink/40" aria-hidden="true"></p>
+            <ul>
+              {base.map(([item, valor]) => (
+                <li class="leader"><span>{item}</span><span class="dots"></span><span class="text-ink/60">{valor}</span></li>
+              ))}
+            </ul>
+            <p class="my-3 border-t-2 border-dotted border-ink/40" aria-hidden="true"></p>
+            <p class="leader text-base font-bold"><span>TOTAL</span><span class="dots"></span><span>1 sistema</span></p>
+            <p class="mt-4 text-center text-xs text-ink/60">gracias por su visita</p>
+          </div>
+        </div>
       </div>
+    </section>
+
+    <!-- CÓMO ARRANCÁS -->
+    <section class="border-y-2 border-ink bg-paper-dark">
+      <div class="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+        <p class="font-mono text-xs sm:text-sm text-muted">cómo arrancás</p>
+        <h2 class="mt-3 text-4xl sm:text-5xl font-bold tracking-[-0.03em]">Tres pasos y listo.</h2>
+        <ol class="mt-8 grid gap-7 sm:grid-cols-3 sm:gap-10">
+          {pasos.map(([titulo, texto], i) => (
+            <li class="grid grid-cols-[4.5rem_1fr] sm:grid-cols-1 gap-x-3 items-start">
+              <span class="block font-mono font-bold text-5xl sm:text-7xl leading-none">0{i + 1}</span>
+              <span>
+                <span class="block sm:mt-3 text-2xl font-bold leading-tight">{titulo}</span>
+                <span class="block mt-1 text-lg leading-snug text-ink/75">{texto}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- PLANES -->
+    <section id="planes" class="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+      <p class="font-mono text-xs sm:text-sm text-muted">planes</p>
+      <h2 class="mt-3 text-4xl sm:text-5xl font-bold tracking-[-0.03em]">La cuenta, clara.</h2>
+      <p class="mt-4 max-w-xl text-lg leading-snug">
+        Todos arrancan con {TRIAL_DAYS} días gratis. Sin tarjeta y sin permanencia: si no te sirve, no pagás nada.
+      </p>
+      <p id="plans-paused" hidden class="mt-4 inline-block font-mono text-sm border-2 border-ink rounded-md px-3 py-1.5 bg-comanda">
+        Las suscripciones pagas están en pausa. La prueba gratis sigue abierta.
+      </p>
+
+      <p id="plans-hint" hidden class="mt-6 font-mono text-xs md:hidden">← deslizá para ver todos →</p>
+      <div
+        id="plans"
+        class="deck -mx-5 px-5 mt-3 md:mt-8 flex gap-5 overflow-x-auto snap-x snap-mandatory pt-5 pb-6 md:mx-0 md:px-0 md:grid md:grid-cols-3 md:overflow-visible"
+      >
+        {[0, 1, 2].map(() => (
+          <div class="shrink-0 w-[78vw] max-w-[320px] md:w-auto md:max-w-none h-80 bg-ticket/60 animate-pulse zigzag-b" aria-hidden="true"></div>
+        ))}
+      </div>
+    </section>
+
+    <!-- CIERRE -->
+    <section class="mx-auto max-w-6xl px-5 pb-20 sm:pb-28">
+      <div class="rounded-[28px] bg-ink text-paper px-6 py-12 sm:px-12 sm:py-16">
+        <h2 class="text-4xl sm:text-6xl font-bold tracking-[-0.04em] leading-[0.95] max-w-3xl">
+          Tu negocio no es estándar. <span class="text-paper/55">Tu sistema tampoco.</span>
+        </h2>
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+          <a href={REGISTER_URL} class="inline-flex items-center justify-center gap-3 rounded-full bg-paper text-ink px-7 py-4 text-lg font-bold hover:bg-white active:scale-[0.98] transition">
+            Crear mi cuenta gratis <span aria-hidden="true" class="font-mono">→</span>
+          </a>
+          <a href={`mailto:${CONTACT_MAIL}`} class="inline-flex items-center justify-center rounded-full border-2 border-paper/40 px-7 py-4 text-lg font-bold hover:border-paper transition">
+            Hablar con nosotros
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t-2 border-ink">
+    <div class="mx-auto max-w-6xl px-5 py-8 pb-28 sm:pb-8 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between font-mono text-sm">
+      <p>promobile+ · © {new Date().getFullYear()} · hecho en Argentina</p>
+      <nav class="flex flex-wrap gap-x-5 gap-y-2">
+        <a href={LOGIN_URL} class="underline underline-offset-4">ingresar</a>
+        <a href={PORTAL_URL} class="underline underline-offset-4">portal de clientes</a>
+        <a href={`mailto:${CONTACT_MAIL}`} class="underline underline-offset-4">{CONTACT_MAIL}</a>
+      </nav>
     </div>
   </footer>
 
-  <!-- Script: carga dinámica de planes desde API -->
+  <!-- CTA fijo en celular -->
+  <div id="sticky-cta" class="sticky-cta sm:hidden fixed inset-x-0 bottom-0 z-50 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-paper/95 backdrop-blur-sm border-t-2 border-ink">
+    <a href={REGISTER_URL} class="flex items-center justify-center gap-3 rounded-full bg-ink text-paper py-4 text-lg font-bold active:scale-[0.98] transition">
+      Probalo gratis {TRIAL_DAYS} días <span aria-hidden="true" class="font-mono">→</span>
+    </a>
+  </div>
+
+  <script>
+    // Selección de rubro: tocar un papel (o deslizar el mazo en el celu) cambia "Un día en...".
+    const deck = document.getElementById('deck');
+    const papers = Array.from(document.querySelectorAll<HTMLButtonElement>('#deck [data-rubro]'));
+    const days = Array.from(document.querySelectorAll<HTMLElement>('[data-dia]'));
+    let current = papers[0]?.dataset.rubro;
+
+    function select(id: string | undefined) {
+      if (!id || id === current) return;
+      current = id;
+      papers.forEach((p) => p.setAttribute('aria-pressed', String(p.dataset.rubro === id)));
+      days.forEach((d) => (d.hidden = d.dataset.dia !== id));
+    }
+
+    papers.forEach((p) =>
+      p.addEventListener('click', () => {
+        select(p.dataset.rubro);
+        if (deck && deck.scrollWidth > deck.clientWidth) {
+          p.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      }),
+    );
+
+    // En el celu, el papel que queda centrado al deslizar pasa a ser el elegido.
+    let scrollTimer: number | undefined;
+    deck?.addEventListener(
+      'scroll',
+      () => {
+        window.clearTimeout(scrollTimer);
+        scrollTimer = window.setTimeout(() => {
+          if (deck.scrollWidth <= deck.clientWidth) return;
+          const center = deck.getBoundingClientRect().left + deck.clientWidth / 2;
+          let best: HTMLButtonElement | undefined;
+          let bestDist = Infinity;
+          papers.forEach((p) => {
+            const r = p.getBoundingClientRect();
+            const dist = Math.abs(r.left + r.width / 2 - center);
+            if (dist < bestDist) { bestDist = dist; best = p; }
+          });
+          select(best?.dataset.rubro);
+        }, 90);
+      },
+      { passive: true },
+    );
+
+    // CTA fijo: aparece cuando el botón principal sale de pantalla.
+    const heroCta = document.getElementById('hero-cta');
+    const sticky = document.getElementById('sticky-cta');
+    if (heroCta && sticky) {
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        sticky.classList.toggle('visible', heroCta.getBoundingClientRect().bottom < 0);
+      };
+      window.addEventListener('scroll', () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
+    }
+  </script>
+
   <script define:vars={{ API_URL, REGISTER_URL }}>
-    const CYCLE = { monthly: 'mes', yearly: 'año', one_time: 'único' };
+    // Planes desde la API, dibujados como tickets.
+    const CYCLE = { monthly: 'mes', yearly: 'año', one_time: 'único', monthly_plan: 'mes', annual: 'año' };
+    const LIMITS = {
+      max_users: ['usuarios', 'usuario'],
+      max_branches: ['sucursales', 'sucursal'],
+      max_clients: ['clientes', 'cliente'],
+      max_products: ['productos', 'producto'],
+      max_orders: ['órdenes', 'orden'],
+      max_qr_lists: ['cartas QR', 'carta QR'],
+      max_history_days: ['días de historial', 'día de historial'],
+    };
+    const truthy = (v) => v === true || v === 1 || v === '1' || v === 'true';
+    const esc = (s) =>
+      String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+    const money = (currency, value) =>
+      `${currency === 'ARS' || !currency ? '$' : 'U$D '}${Number(value || 0).toLocaleString('es-AR')}`;
+    const futureDate = (v) => {
+      if (!v) return null;
+      const d = new Date(String(v).trim().replace(' ', 'T'));
+      return Number.isNaN(d.getTime()) || d < new Date() ? null : d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' });
+    };
+    const line = (a, b, cls = '') =>
+      `<li class="leader ${cls}"><span>${a}</span><span class="dots"></span><span class="text-right">${b}</span></li>`;
+
+    function renderPlan(plan) {
+      const featured = truthy(plan.is_featured);
+      const promo = truthy(plan.promo_active) && plan.promo_price != null && Number(plan.promo_price) !== Number(plan.base_price);
+      const price = promo ? plan.effective_price ?? plan.price : plan.price;
+      const base = plan.base_price ?? plan.price;
+      const until = promo ? futureDate(plan.promo_ends_at) : null;
+      const cycle = CYCLE[plan.billing_cycle] || plan.billing_cycle || 'mes';
+      const features = Array.isArray(plan.features) ? plan.features : [];
+      const limits = (Array.isArray(plan.limits) ? plan.limits : [])
+        .filter((l) => LIMITS[l.limit_key] && Number(l.limit_value) > 0)
+        .map((l) => {
+          const n = Number(l.limit_value);
+          return [`hasta ${n.toLocaleString('es-AR')}`, LIMITS[l.limit_key][n === 1 ? 1 : 0]];
+        });
+
+      return `
+        <article class="paper relative shrink-0 snap-center w-[78vw] max-w-[320px] md:w-auto md:max-w-none bg-ticket zigzag-b px-6 pt-6 pb-10 font-mono text-[13px] leading-relaxed flex flex-col ${featured ? 'md:-translate-y-3' : ''}">
+          ${featured ? `<span class="absolute top-4 right-4 rotate-[4deg] bg-comanda border-2 border-ink rounded-md px-2 py-0.5 font-display font-bold uppercase text-xs tracking-wider">El más elegido</span>` : ''}
+          <h3 class="font-display text-2xl font-bold tracking-tight">${esc(plan.name)}</h3>
+          ${plan.description ? `<p class="mt-1 text-ink/60">${esc(plan.description)}</p>` : ''}
+          <p class="my-3 border-t-2 border-dotted border-ink/40"></p>
+          <ul class="flex-1">
+            ${features.map((f) => line(esc(f), '✓')).join('')}
+            ${limits.map(([a, b]) => line(esc(b), esc(a))).join('')}
+            ${!features.length && !limits.length ? line('todo lo de tu rubro', '✓') : ''}
+          </ul>
+          <p class="my-3 border-t-2 border-dotted border-ink/40"></p>
+          ${promo ? `<p class="leader text-ink/50"><span>antes</span><span class="dots"></span><s>${money(plan.currency, base)}</s></p>` : ''}
+          <p class="leader items-end"><span class="font-bold">TOTAL</span><span class="dots"></span><span class="font-display text-3xl font-bold tracking-tight">${money(plan.currency, price)}</span></p>
+          <p class="text-right text-ink/60">por ${esc(cycle)}${until ? ` · promo hasta el ${until}` : ''}</p>
+          <a href="${REGISTER_URL}" class="mt-5 block rounded-full ${featured ? 'bg-ink text-paper hover:bg-ink/85' : 'border-2 border-ink hover:bg-ink hover:text-paper'} py-3.5 text-center font-display text-base font-bold transition">
+            Empezar gratis
+          </a>
+        </article>`;
+    }
 
     async function loadPlans() {
-      const container = document.getElementById('plans-container');
+      const container = document.getElementById('plans');
       if (!container) return;
-
       try {
         const res = await fetch(`${API_URL}/api/plans`);
+        if (!res.ok) throw new Error(String(res.status));
         const data = await res.json();
-        if (!res.ok) throw new Error();
+        const plans = (Array.isArray(data) ? data : Array.isArray(data?.plans) ? data.plans : [])
+          .slice()
+          .sort((a, b) => Number(a.base_price ?? a.price) - Number(b.base_price ?? b.price));
 
-        const plans = Array.isArray(data) ? data : Array.isArray(data?.plans) ? data.plans : [];
-
+        if (['false', '0'].includes(String(data?.subscriptions_enabled))) {
+          document.getElementById('plans-paused')?.removeAttribute('hidden');
+        }
         if (!plans.length) {
-          container.innerHTML = `<div class="col-span-3 text-center py-12 text-slate-500 text-sm">Planes disponibles próximamente.</div>`;
+          container.innerHTML = `<p class="font-mono text-sm">Los planes se publican pronto. Mientras tanto, <a class="underline" href="${REGISTER_URL}">probalo gratis</a>.</p>`;
           return;
         }
-
-        container.innerHTML = plans.map((plan, i) => {
-          const isPopular = i === Math.floor(plans.length / 2);
-          const price = Number(plan.price).toLocaleString('es-AR');
-          const currency = plan.currency === 'ARS' ? '$' : 'U$D';
-          const cycle = CYCLE[plan.billing_cycle] || plan.billing_cycle;
-          const features = Array.isArray(plan.features) ? plan.features : [];
-
-          return `
-            <div class="relative flex flex-col rounded-2xl border p-6 ${isPopular
-              ? 'border-indigo-500/50 bg-gradient-to-b from-indigo-950/50 to-slate-900/50'
-              : 'border-white/5 bg-slate-900/30'
-            }">
-              ${isPopular ? `<div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 bg-indigo-600 text-white text-xs font-bold rounded-full">Más popular</div>` : ''}
-              <h3 class="text-lg font-bold text-white mb-1">${plan.name}</h3>
-              ${plan.description ? `<p class="text-sm text-slate-400 mb-4">${plan.description}</p>` : ''}
-              <div class="flex items-end gap-1 my-4">
-                <span class="text-4xl font-extrabold text-white">${currency}${price}</span>
-                <span class="text-slate-400 mb-1 text-sm">/ ${cycle}</span>
-              </div>
-              ${features.length ? `
-                <ul class="space-y-2 mb-6 flex-1">
-                  ${features.map(f => `
-                    <li class="flex items-center gap-2 text-sm text-slate-300">
-                      <svg class="w-4 h-4 shrink-0 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
-                      </svg>
-                      ${f}
-                    </li>
-                  `).join('')}
-                </ul>
-              ` : '<div class="flex-1"></div>'}
-              <a href="${REGISTER_URL}" class="mt-auto flex items-center justify-center py-2.5 px-4 ${isPopular
-                ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
-                : 'bg-slate-800 hover:bg-slate-700 text-slate-200'
-              } text-sm font-semibold rounded-xl transition-colors">
-                Empezar gratis
-              </a>
-            </div>
-          `;
-        }).join('');
+        container.innerHTML = plans.map(renderPlan).join('');
+        // En el celu, arrancar mostrando el plan destacado.
+        const featuredIndex = plans.findIndex((p) => truthy(p.is_featured));
+        if (featuredIndex > 0 && container.scrollWidth > container.clientWidth) {
+          const card = container.children[featuredIndex];
+          container.scrollLeft = card.offsetLeft - (container.clientWidth - card.offsetWidth) / 2;
+          document.getElementById('plans-hint')?.removeAttribute('hidden');
+        } else if (container.scrollWidth > container.clientWidth) {
+          document.getElementById('plans-hint')?.removeAttribute('hidden');
+        }
       } catch {
-        container.innerHTML = `<div class="col-span-3 text-center py-12 text-slate-500 text-sm">No se pudieron cargar los planes. <a href="${REGISTER_URL}" class="text-indigo-400 hover:underline">Registrate para ver precios</a>.</div>`;
+        container.innerHTML = `<p class="font-mono text-sm">No pudimos traer los precios. <a class="underline" href="${REGISTER_URL}">Registrate</a> y los ves adentro.</p>`;
       }
     }
 
