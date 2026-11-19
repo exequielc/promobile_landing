@@ -7,6 +7,8 @@ const REGISTER_URL = 'https://app.promobile.site/register';
 const PORTAL_URL = 'https://app.promobile.site/portal';
 const API_URL = 'https://api.promobile.site';
 const CONTACT_MAIL = 'hola@promobile.site';
+const INSTAGRAM_USER = 'sistemasduosoft';
+const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_USER}/`;
 const TRIAL_DAYS = 15;
 
 // Cada rubro: su "papelito", su sello y su día de trabajo.
@@ -310,6 +312,10 @@ const pasos = [
           <a href={`mailto:${CONTACT_MAIL}`} class="inline-flex items-center justify-center rounded-full border-2 border-paper/40 px-7 py-4 text-lg font-bold hover:border-paper transition">
             Hablar con nosotros
           </a>
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener" aria-label={`Instagram @${INSTAGRAM_USER}`} class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-paper/40 px-7 py-4 text-lg font-bold hover:border-paper transition">
+            <svg aria-hidden="true" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            Seguinos
+          </a>
         </div>
       </div>
     </section>
@@ -322,6 +328,10 @@ const pasos = [
         <a href={LOGIN_URL} class="underline underline-offset-4">ingresar</a>
         <a href={PORTAL_URL} class="underline underline-offset-4">portal de clientes</a>
         <a href={`mailto:${CONTACT_MAIL}`} class="underline underline-offset-4">{CONTACT_MAIL}</a>
+        <a href={INSTAGRAM_URL} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 underline underline-offset-4">
+          <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          @{INSTAGRAM_USER}
+        </a>
       </nav>
     </div>
   </footer>
